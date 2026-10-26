@@ -1,9 +1,18 @@
 const $=id=>document.getElementById(id);
-const defaults={points:0,exp:0,level:1,history:[],goalMinutes:30,timeCoeff:1,inkCoeff:1.5,streak:0,lastStudyDate:null};
+const defaults={points:0,exp:0,level:1,history:[],goalMinutes:30,timeCoeff:1,inkCoeff:1.5,streak:0,lastStudyDate:null,userName:"プレイヤー",ownedItems:[],equippedMascot:"😺",equippedTheme:"default"};
 const state=Object.assign({},defaults,JSON.parse(localStorage.getItem("studyQuest")||"null")||{});
 let beforeData=null,afterData=null,startWall=0,elapsedBeforePause=0,isPaused=false,timerId=null;
 
 function save(){localStorage.setItem("studyQuest",JSON.stringify(state))}
+const shopItems=[
+ {id:"fox",name:"きつねマスコット",icon:"🦊",desc:"ホーム画面のマスコットをきつねに変更",cost:100,type:"mascot",value:"🦊"},
+ {id:"rabbit",name:"うさぎマスコット",icon:"🐰",desc:"ホーム画面のマスコットをうさぎに変更",cost:150,type:"mascot",value:"🐰"},
+ {id:"bear",name:"くまマスコット",icon:"🐻",desc:"ホーム画面のマスコットをくまに変更",cost:200,type:"mascot",value:"🐻"},
+ {id:"star",name:"星空テーマ",icon:"🌌",desc:"アプリの背景を夜空カラーに変更",cost:120,type:"theme",value:"night"},
+ {id:"mint",name:"ミントテーマ",icon:"🌿",desc:"アプリの背景をミントカラーに変更",cost:120,type:"theme",value:"mint"},
+ {id:"crown",name:"称号：努力家",icon:"👑",desc:"努力家の称号をコレクションに追加",cost:250,type:"title",value:"努力家"},
+ {id:"book",name:"称号：知識の探求者",icon:"📚",desc:"知識の探求者の称号をコレクションに追加",cost:350,type:"title",value:"知識の探求者"}
+];
 function todayKey(){const d=new Date();return d.toISOString().slice(0,10)}
 function minutesToday(){const k=todayKey();return Math.round(state.history.filter(h=>h.dateKey===k).reduce((a,h)=>a+h.seconds,0)/60)}
 function updateHome(){
@@ -11,13 +20,15 @@ function updateHome(){
  $("goalText").textContent=`${goal} 分`; $("todayText").textContent=`今日の勉強時間 ${mins} 分`;
  $("goalBar").style.width=`${Math.min(100,mins/goal*100)}%`;
  $("speechText").innerHTML=mins>=goal?"今日の目標達成！えらいね。":mins===0?"まずは少しだけ始めてみよう。":`あと ${Math.max(0,goal-mins)} 分で今日の目標だよ。`;
- $("mascot").textContent=["😺","🐱","😸","😺","😻","🐯"][Math.min(5,state.level-1)];
+ $("mascot").textContent=state.equippedMascot||["😺","🐱","😸","😺","😻","🐯"][Math.min(5,state.level-1)];
 }
 function updateHeader(){
  $("pointsText").textContent=`★ ${state.points} pt`; $("levelText").textContent=`Lv.${state.level}`;
+ if($("displayName"))$("displayName").textContent=state.userName||"プレイヤー";
+ if(document.body)document.body.dataset.theme=state.equippedTheme||"default";
  $("expText").textContent=`${state.exp} / 100 EXP`; $("expBar").style.width=`${state.exp}%`; updateHome();
 }
-function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");scrollTo(0,0);if(id==="historyScreen")renderHistory();if(id==="achievementScreen")renderAchievements();if(id==="settingsScreen")loadSettings()}
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");scrollTo(0,0);if(id==="historyScreen")renderHistory();if(id==="achievementScreen")renderAchievements();if(id==="settingsScreen")loadSettings();if(id==="shopScreen")renderShop()}
 function formatTime(sec){sec=Math.max(0,Math.floor(sec));return`${String(Math.floor(sec/3600)).padStart(2,"0")}:${String(Math.floor(sec%3600/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`}
 function resetSession(){
  beforeData=afterData=null;startWall=0;elapsedBeforePause=0;isPaused=false;clearInterval(timerId);timerId=null;
@@ -116,12 +127,18 @@ $("exportBtn").addEventListener("click",()=>{
  const csv=[head.join(","),...rows.map(r=>r.join(","))].join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`StudyQuest_research_${todayKey()}.csv`;a.click();
 });
-function loadSettings(){$("goalInput").value=state.goalMinutes;$("timeCoeffInput").value=state.timeCoeff;$("inkCoeffInput").value=state.inkCoeff}
-$("saveSettingsBtn").addEventListener("click",()=>{state.goalMinutes=Math.max(1,Number($("goalInput").value)||30);state.timeCoeff=Math.max(0,Number($("timeCoeffInput").value)||1);state.inkCoeff=Math.max(0,Number($("inkCoeffInput").value)||1.5);save();updateHeader();alert("設定を保存しました。");showScreen("homeScreen")});
+function loadSettings(){$("nameInput").value=state.userName||"プレイヤー";$("goalInput").value=state.goalMinutes;$("timeCoeffInput").value=state.timeCoeff;$("inkCoeffInput").value=state.inkCoeff}
+$("saveSettingsBtn").addEventListener("click",()=>{state.userName=$("nameInput").value.trim().slice(0,16)||"プレイヤー";state.goalMinutes=Math.max(1,Number($("goalInput").value)||30);state.timeCoeff=Math.max(0,Number($("timeCoeffInput").value)||1);state.inkCoeff=Math.max(0,Number($("inkCoeffInput").value)||1.5);save();updateHeader();alert("設定を保存しました。");showScreen("homeScreen")});
 $("startBtn").addEventListener("click",()=>{resetSession();showScreen("studyScreen")});$("studyNav").addEventListener("click",()=>{resetSession();showScreen("studyScreen")});
 $("cancelBtn").addEventListener("click",()=>{resetSession();showScreen("homeScreen")});$("backToHomeBtn").addEventListener("click",()=>{resetSession();showScreen("homeScreen")});
 $("resultHomeBtn").addEventListener("click",()=>{resetSession();showScreen("homeScreen")});$("historyBtn").addEventListener("click",()=>showScreen("historyScreen"));$("historyNav").addEventListener("click",()=>showScreen("historyScreen"));$("historyHomeBtn").addEventListener("click",()=>showScreen("homeScreen"));
 $("achievementBtn").addEventListener("click",()=>showScreen("achievementScreen"));$("achievementHomeBtn").addEventListener("click",()=>showScreen("homeScreen"));
-$("settingsBtn").addEventListener("click",()=>showScreen("settingsScreen"));$("settingsHomeBtn").addEventListener("click",()=>showScreen("homeScreen"));
+$("settingsBtn").addEventListener("click",()=>showScreen("settingsScreen"));
+$("shopBtn").addEventListener("click",()=>showScreen("shopScreen"));$("shopHomeBtn").addEventListener("click",()=>showScreen("homeScreen"));
+function renderShop(){
+ $("shopBalance").textContent=`${state.points} pt`;
+ $("shopList").innerHTML=shopItems.map(item=>{const owned=(state.ownedItems||[]).includes(item.id),equipped=(item.type==="mascot"&&state.equippedMascot===item.value)||(item.type==="theme"&&(state.equippedTheme||"default")===item.value);let label=owned?(equipped?"使用中":(item.type==="mascot"||item.type==="theme"?"使う":"購入済み")):`${item.cost} ptで交換`;return `<div class="shop-item"><div class="shop-icon">${item.icon}</div><div class="shop-info"><strong>${item.name}</strong><small>${item.desc}</small><span>${item.cost} pt</span></div><button class="secondary mini shop-action" data-item="${item.id}" ${(!owned&&state.points<item.cost)?"disabled":""}>${label}</button></div>`}).join("");
+ document.querySelectorAll("[data-item]").forEach(btn=>btn.addEventListener("click",()=>{const item=shopItems.find(x=>x.id===btn.dataset.item);if(!item)return;const owned=(state.ownedItems||[]).includes(item.id);if(!owned){if(state.points<item.cost)return;state.points-=item.cost;state.ownedItems.push(item.id)}if(item.type==="mascot")state.equippedMascot=item.value;if(item.type==="theme")state.equippedTheme=item.value;save();updateHeader();renderShop()}));
+}$("settingsHomeBtn").addEventListener("click",()=>showScreen("homeScreen"));
 document.querySelectorAll(".bottom-nav button[data-screen]").forEach(b=>b.addEventListener("click",()=>showScreen(b.dataset.screen)));
 updateHeader();
