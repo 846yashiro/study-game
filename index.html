@@ -9,7 +9,7 @@
 <body>
 <main class="app">
 <header class="topbar">
-  <div><div class="user-name">ひなたくん</div><div class="level" id="levelText">Lv.1</div></div>
+  <div><div class="user-name" id="displayName">プレイヤー</div><div class="level" id="levelText">Lv.1</div></div>
   <div class="points" id="pointsText">★ 0 pt</div>
 </header>
 
@@ -29,7 +29,8 @@
   <div class="grid">
     <button class="menu-card" id="historyBtn">📊<span>記録</span></button>
     <button class="menu-card" id="achievementBtn">🏆<span>実績</span></button>
-    <button class="menu-card" id="settingsBtn">⚙️<span>設定</span></button>
+    <button class="menu-card" id="shopBtn">🛍️<span>ポイントショップ</span></button>
+    <button class="menu-card" id="settingsBtn">⚙️<span>設定・名前</span></button>
     <button class="menu-card" id="exportBtn">📝<span>研究データ出力</span></button>
   </div>
 </section>
@@ -103,6 +104,14 @@
   <button class="primary" id="historyHomeBtn">ホームへ</button>
 </section>
 
+<section id="shopScreen" class="screen">
+  <h1>ポイントショップ</h1>
+  <p class="sub">勉強で集めたポイントを使って、ホーム画面をカスタマイズしよう。</p>
+  <div class="shop-balance">所持ポイント <strong id="shopBalance">0 pt</strong></div>
+  <div id="shopList"></div>
+  <button class="primary" id="shopHomeBtn">ホームへ</button>
+</section>
+
 <section id="achievementScreen" class="screen">
   <h1>実績</h1>
   <div id="achievementList"></div>
@@ -112,6 +121,7 @@
 <section id="settingsScreen" class="screen">
   <h1>設定</h1>
   <div class="form-card">
+    <label>ユーザー名<input id="nameInput" type="text" maxlength="16" placeholder="名前を入力（16文字まで）"></label>
     <label>1日の目標（分）<input id="goalInput" type="number" min="1" max="600" step="5"></label>
     <label>時間ポイント係数<input id="timeCoeffInput" type="number" min="0" max="10" step="0.1"></label>
     <label>書き込みポイント係数<input id="inkCoeffInput" type="number" min="0" max="10" step="0.1"></label>
