@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study Quest</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+<header class="topbar">
+  <div><div class="user-name">ひなたくん</div><div class="level" id="levelText">Lv.1</div></div>
+  <div class="points" id="pointsText">★ 0 pt</div>
+</header>
+
+<section id="homeScreen" class="screen active">
+  <div class="speech" id="speechText">今日も少しずつ<br>勉強していこうね</div>
+  <div class="mascot" id="mascot">😺</div>
+  <div class="card">
+    <div class="row"><strong>今日の目標</strong><span id="goalText">30 分</span></div>
+    <div class="progress"><div id="goalBar"></div></div>
+    <small id="todayText">今日の勉強時間 0 分</small>
+  </div>
+  <div class="card">
+    <div class="row"><span>次のレベルまで</span><span id="expText">0 / 100 EXP</span></div>
+    <div class="exp-bar"><div id="expBar"></div></div>
+  </div>
+  <button class="primary" id="startBtn">📚 勉強を開始</button>
+  <div class="grid">
+    <button class="menu-card" id="historyBtn">📊<span>記録</span></button>
+    <button class="menu-card" id="achievementBtn">🏆<span>実績</span></button>
+    <button class="menu-card" id="settingsBtn">⚙️<span>設定</span></button>
+    <button class="menu-card" id="exportBtn">📝<span>研究データ出力</span></button>
+  </div>
+</section>
+
+<section id="studyScreen" class="screen">
+  <h1>勉強を始めよう</h1>
+  <p class="sub">科目と課題名を入力して、勉強前の状態を撮影します。</p>
+  <div class="form-card">
+    <label>科目
+      <select id="subject">
+        <option>数学</option><option>英語</option><option>国語</option>
+        <option>理科</option><option>社会</option><option>情報</option><option>その他</option>
+      </select>
+    </label>
+    <label>課題名
+      <input id="taskName" maxlength="40" placeholder="例：数学プリント No.3">
+    </label>
+    <label>学習メモ（任意）
+      <textarea id="studyMemo" maxlength="120" placeholder="今日やること、気づいたことなど"></textarea>
+    </label>
+  </div>
+  <label class="photo-box">
+    <input id="beforeInput" type="file" accept="image/*" capture="environment">
+    <span id="beforeLabel">📷 勉強前の写真を選ぶ</span>
+    <img id="beforePreview" alt="">
+  </label>
+  <div class="tip">できるだけ同じ場所・同じ向き・同じ明るさで撮影すると比較しやすくなります。</div>
+  <div class="timer" id="timer">00:00:00</div>
+  <div class="timer-state" id="timerState">待機中</div>
+  <button class="primary" id="beginTimerBtn" disabled>▶ 勉強を開始する</button>
+  <button class="secondary hidden" id="pauseBtn">Ⅱ 一時停止</button>
+  <button class="secondary hidden" id="finishBtn">■ 勉強を終了する</button>
+  <button class="text-btn" id="cancelBtn">キャンセル</button>
+</section>
+
+<section id="afterScreen" class="screen">
+  <h1>勉強おつかれさま</h1>
+  <p class="sub">勉強前とできるだけ同じ位置から終了後の状態を撮影します。</p>
+  <div class="session-summary" id="sessionSummary"></div>
+  <label class="photo-box">
+    <input id="afterInput" type="file" accept="image/*" capture="environment">
+    <span id="afterLabel">📷 勉強後の写真を選ぶ</span>
+    <img id="afterPreview" alt="">
+  </label>
+  <button class="primary" id="analyzeBtn" disabled>🔍 結果を計算する</button>
+  <button class="text-btn" id="backToHomeBtn">ホームへ戻る</button>
+</section>
+
+<section id="resultScreen" class="screen">
+  <div class="result-icon">🎉</div>
+  <h1>勉強完了！</h1>
+  <div class="result-card"><span>科目・課題</span><strong id="resultTask">-</strong></div>
+  <div class="result-card"><span>勉強時間</span><strong id="resultTime">00:00:00</strong></div>
+  <div class="result-card"><span>推定書き込み量</span><strong id="resultInk">0.00 %</strong><small>勉強前後で増えたインク相当面積の推定値</small></div>
+  <div class="result-card"><span>画像比較の品質</span><strong id="resultQuality">-</strong><small id="qualityNote"></small></div>
+  <div class="result-card"><span>獲得ポイント</span><strong class="gold" id="resultPoints">+0 pt</strong><small id="resultBreakdown"></small></div>
+  <button class="primary" id="resultHomeBtn">ホームへ</button>
+</section>
+
+<section id="historyScreen" class="screen">
+  <h1>学習記録</h1>
+  <div class="filter-row">
+    <select id="historySubjectFilter">
+      <option value="すべて">すべて</option><option>数学</option><option>英語</option><option>国語</option>
+      <option>理科</option><option>社会</option><option>情報</option><option>その他</option>
+    </select>
+    <button class="secondary mini" id="clearHistoryBtn">記録を消す</button>
+  </div>
+  <div id="historySummary" class="card"></div>
+  <div id="historyList"></div>
+  <button class="primary" id="historyHomeBtn">ホームへ</button>
+</section>
+
+<section id="achievementScreen" class="screen">
+  <h1>実績</h1>
+  <div id="achievementList"></div>
+  <button class="primary" id="achievementHomeBtn">ホームへ</button>
+</section>
+
+<section id="settingsScreen" class="screen">
+  <h1>設定</h1>
+  <div class="form-card">
+    <label>1日の目標（分）<input id="goalInput" type="number" min="1" max="600" step="5"></label>
+    <label>時間ポイント係数<input id="timeCoeffInput" type="number" min="0" max="10" step="0.1"></label>
+    <label>書き込みポイント係数<input id="inkCoeffInput" type="number" min="0" max="10" step="0.1"></label>
+  </div>
+  <p class="sub left">係数は研究用の仮設定。実験データを見ながら変更できます。</p>
+  <button class="primary" id="saveSettingsBtn">設定を保存</button>
+  <button class="text-btn" id="settingsHomeBtn">ホームへ</button>
+</section>
+
+<nav class="bottom-nav">
+  <button data-screen="homeScreen">🏠<span>ホーム</span></button>
+  <button id="studyNav">📚<span>勉強</span></button>
+  <button id="historyNav">📊<span>記録</span></button>
+</nav>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

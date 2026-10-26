@@ -1,0 +1,39 @@
+*{box-sizing:border-box}
+body{margin:0;background:#eaf3ff;color:#202938;font-family:system-ui,-apple-system,"Yu Gothic",Meiryo,sans-serif}
+button,input,select,textarea{font:inherit}
+.app{width:min(620px,100%);min-height:100vh;margin:auto;background:#f8fbff;padding-bottom:88px;box-shadow:0 0 30px #0001}
+.topbar{height:98px;background:#fff;border-bottom:1px solid #e4e8ee;padding:18px 26px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.user-name{font-size:14px;color:#687386}.level{font-size:27px;font-weight:800}.points{background:#fff0a9;border-radius:28px;padding:12px 18px;font-weight:800}
+.screen{display:none;padding:28px 26px}.screen.active{display:block}
+.speech{width:max-content;max-width:90%;margin:22px 18px 8px auto;background:#fff;padding:14px 20px;border-radius:18px;box-shadow:0 5px 18px #0001;text-align:center}
+.mascot{height:180px;display:grid;place-items:center;font-size:100px}
+.card,.result-card,.form-card,.session-summary{background:#fff;border-radius:20px;padding:20px;box-shadow:0 5px 18px #0001;margin-bottom:18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.progress,.exp-bar{height:14px;background:#ddd;border-radius:99px;margin:12px 0 7px;overflow:hidden}
+.progress div,.exp-bar div{height:100%;width:0;background:#ffcc43;border-radius:99px}
+.primary,.secondary{width:100%;border:0;border-radius:17px;padding:20px;margin:8px 0;font-weight:800;cursor:pointer}
+.primary{background:#ffca3f;box-shadow:0 4px 0 #d9a600}.secondary{background:#263445;color:#fff}
+.primary:disabled{opacity:.45;cursor:not-allowed}.secondary:disabled{opacity:.45;cursor:not-allowed}
+.text-btn{display:block;margin:16px auto;border:0;background:none;color:#657083;cursor:pointer}.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.menu-card{background:#fff;border:0;border-radius:18px;padding:22px;box-shadow:0 5px 18px #0001;cursor:pointer}.menu-card span{display:block;margin-top:7px}
+h1{text-align:center;margin:10px 0 8px;font-size:30px}.sub{text-align:center;color:#687386;line-height:1.6}.sub.left{text-align:left}
+.form-card label{display:block;font-weight:700;margin-bottom:16px}.form-card label:last-child{margin-bottom:0}
+.form-card input,.form-card select,.form-card textarea{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
+.form-card textarea{min-height:90px;resize:vertical}
+.photo-box{display:block;background:#fff;border:2px dashed #b9c5d4;border-radius:18px;min-height:220px;margin:22px 0;padding:18px;text-align:center;cursor:pointer}
+.photo-box input{display:none}.photo-box span{display:block;padding:70px 10px}
+.photo-box img{display:none;width:100%;max-height:390px;object-fit:contain;border-radius:12px}
+.photo-box.has-image img{display:block}.photo-box.has-image span{display:none}
+.tip{background:#eef5ff;border-radius:12px;padding:12px 14px;color:#657083;font-size:13px;line-height:1.6}
+.timer{text-align:center;font-size:44px;font-weight:800;letter-spacing:2px;margin:22px 0 6px}.timer-state{text-align:center;color:#738094;margin-bottom:8px}
+.result-icon{text-align:center;font-size:70px;margin-top:10px}
+.result-card{text-align:center}.result-card span{display:block;color:#687386;margin-bottom:8px}.result-card strong{font-size:30px}.result-card small{display:block;color:#7a8492;margin-top:8px;line-height:1.5}.gold{color:#e0a900}
+.filter-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}.filter-row select{flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
+.mini{width:auto;padding:12px;margin:0}.history-item{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;gap:15px;box-shadow:0 4px 14px #0001}
+.history-item strong{display:block}.history-item small{display:block;color:#718096;margin-top:5px;line-height:1.5}.history-points{font-weight:800;white-space:nowrap}
+.achievement{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 4px 14px #0001}.achievement.locked{opacity:.45}
+.achievement-title{font-weight:800}.achievement-desc{color:#687386;font-size:13px;margin-top:4px}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(620px,100%);height:72px;background:#fff;border-top:1px solid #e2e6eb;display:flex;z-index:10}
+.bottom-nav button{flex:1;border:0;background:none;color:#394556;cursor:pointer}.bottom-nav span{display:block;font-size:12px;margin-top:4px}
+@media(max-width:420px){.topbar{padding:15px 18px}.screen{padding:22px 18px}.mascot{height:160px}.timer{font-size:36px}}
